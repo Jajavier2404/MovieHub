@@ -1,65 +1,35 @@
-from pydantic import BaseModel, EmailStr
-from datetime import datetime
+from sqlmodel import SQLModel
 from typing import Optional
 
-
-class UserCreate(BaseModel):
+class UserCreate(SQLModel):
     username: str
-    email: EmailStr
+    email: str
     password: str
 
-
-class UserLogin(BaseModel):
-    username: str
-    password: str
-
-
-class UserResponse(BaseModel):
+class UserRead(SQLModel):
     id: int
     username: str
     email: str
-    created_at: datetime
-    
-    class Config:
-        from_attributes = True
 
-
-class MovieCreate(BaseModel):
+class MovieCreate(SQLModel):
     title: str
-    description: Optional[str] = None
-    release_year: Optional[int] = None
-    genre: Optional[str] = None
-    director: Optional[str] = None
-    poster_url: Optional[str] = None
+    year: int
+    description: str
 
-
-class MovieResponse(BaseModel):
+class MovieRead(SQLModel):
     id: int
     title: str
-    description: Optional[str] = None
-    release_year: Optional[int] = None
-    genre: Optional[str] = None
-    director: Optional[str] = None
-    poster_url: Optional[str] = None
-    created_at: datetime
-    
-    class Config:
-        from_attributes = True
+    year: int
+    description: str
 
-
-class ReviewCreate(BaseModel):
-    content: str
+class ReviewCreate(SQLModel):
     rating: int
+    comment: str
     movie_id: int
 
-
-class ReviewResponse(BaseModel):
+class ReviewRead(SQLModel):
     id: int
-    content: str
     rating: int
-    created_at: datetime
+    comment: str
     user_id: int
     movie_id: int
-    
-    class Config:
-        from_attributes = True
