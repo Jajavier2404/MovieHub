@@ -946,4 +946,4 @@ def test_create_movie():
 
 *Documentación generada para Cinemática Backend API - Versión 1.0*
 
-*Última actualización: $(date)*
+*Última actualización: $(27/06/2025)*
