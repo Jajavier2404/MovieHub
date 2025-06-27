@@ -1,41 +1,75 @@
 import React, { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 function Login() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const navigate = useNavigate();
+  const [formData, setFormData] = useState({
+    username: '',
+    email: '',
+    password: ''
+  });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState('');
-  const navigate = useNavigate();
+
+  const handleInputChange = (field, value) => {
+    setFormData(prev => ({
+      ...prev,
+      [field]: value
+    }));
+    // Limpiar error cuando el usuario empiece a escribir
+    if (error) setError('');
+  };
 
   const handleLogin = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
     setError('');
     
+    // Validación básica
+    if (!formData.username || !formData.email || !formData.password) {
+      setError('Todos los campos son obligatorios');
+      setIsSubmitting(false);
+      return;
+    }
+    
     try {
-      const res = await fetch('http://localhost:8000/auth/login', {
+      const response = await fetch('http://localhost:8000/auth/login', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password })
+        headers: { 
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify({
+          username: formData.username,
+          email: formData.email,
+          password: formData.password
+        })
       });
-      const data = await res.json();
       
-      if (data.access_token) {
-        localStorage.setItem('token', data.access_token);
+      const data = await response.json();
+      
+      if (response.ok && data.access_token) {
+        // Guardar token
+        console.log('Token recibido:', data.access_token);
+        localStorage.setItem('token', data.access_token); 
         navigate('/');
       } else {
-        setError('Credenciales inválidas. Por favor, verifica tu email y contraseña.');
+        setError(data.message || data.detail || 'Credenciales inválidas. Por favor, verifica tus datos.');
       }
     } catch (error) {
-      setError('Error de conexión. Por favor, intenta de nuevo.');
+      setError('Error de conexión con el servidor. Por favor, intenta de nuevo.');
+      console.error('Login error:', error);
     } finally {
       setIsSubmitting(false);
     }
   };
 
+  const handleRegisterClick = () => {
+    navigate('/register');
+  };
+
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 py-8">
+    <div className="min-h-screen bg-gray-900 flex items-center justify-center px-4 py-8">
       <div className="max-w-md w-full">
         {/* Header */}
         <div className="text-center mb-8">
@@ -50,7 +84,7 @@ function Login() {
 
         {/* Login Form */}
         <div className="bg-gray-800/50 backdrop-blur-sm rounded-2xl border border-gray-700/50 p-8">
-          <form onSubmit={handleLogin} className="space-y-6">
+          <div className="space-y-6">
             {/* Error Message */}
             {error && (
               <div className="bg-red-900/30 border border-red-500/50 rounded-lg p-4 flex items-center space-x-3">
@@ -58,6 +92,23 @@ function Login() {
                 <p className="text-red-300 text-sm">{error}</p>
               </div>
             )}
+
+            {/* Username Input */}
+            <div>
+              <label className="block text-gray-300 font-medium mb-3 flex items-center space-x-2">
+                <span>👤</span>
+                <span>Nombre de usuario</span>
+              </label>
+              <input
+                type="text"
+                placeholder="tu_usuario"
+                value={formData.username}
+                onChange={(e) => handleInputChange('username', e.target.value)}
+                disabled={isSubmitting}
+                className="w-full bg-gray-700/50 border border-gray-600 rounded-lg px-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                required
+              />
+            </div>
 
             {/* Email Input */}
             <div>
@@ -68,9 +119,10 @@ function Login() {
               <input
                 type="email"
                 placeholder="tu@email.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="w-full bg-gray-700/50 border border-gray-600 rounded-lg px-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200"
+                value={formData.email}
+                onChange={(e) => handleInputChange('email', e.target.value)}
+                disabled={isSubmitting}
+                className="w-full bg-gray-700/50 border border-gray-600 rounded-lg px-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
                 required
               />
             </div>
@@ -84,17 +136,19 @@ function Login() {
               <input
                 type="password"
                 placeholder="••••••••"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="w-full bg-gray-700/50 border border-gray-600 rounded-lg px-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200"
+                value={formData.password}
+                onChange={(e) => handleInputChange('password', e.target.value)}
+                disabled={isSubmitting}
+                className="w-full bg-gray-700/50 border border-gray-600 rounded-lg px-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
                 required
               />
             </div>
 
             {/* Submit Button */}
             <button
-              type="submit"
-              disabled={isSubmitting || !email || !password}
+              type="button"
+              onClick={handleLogin}
+              disabled={isSubmitting || !formData.username || !formData.email || !formData.password}
               className="w-full bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 disabled:from-gray-600 disabled:to-gray-700 text-white font-bold py-3 px-6 rounded-lg transition-all duration-200 shadow-lg hover:shadow-purple-500/25 hover:scale-105 disabled:scale-100 disabled:shadow-none flex items-center justify-center space-x-2"
             >
               {isSubmitting ? (
@@ -109,7 +163,7 @@ function Login() {
                 </>
               )}
             </button>
-          </form>
+          </div>
 
           {/* Divider */}
           <div className="flex items-center my-6">
@@ -121,13 +175,14 @@ function Login() {
           {/* Register Link */}
           <div className="text-center">
             <p className="text-gray-400 mb-4">¿No tienes una cuenta?</p>
-            <Link
-              to="/register"
+            <button
+              type="button"
+              onClick={handleRegisterClick}
               className="inline-flex items-center space-x-2 text-purple-400 hover:text-purple-300 font-medium transition-colors duration-200"
             >
               <span>Crear cuenta nueva</span>
               <span>→</span>
-            </Link>
+            </button>
           </div>
         </div>
 
