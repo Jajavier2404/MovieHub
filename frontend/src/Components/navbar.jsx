@@ -56,12 +56,7 @@ function Navbar() {
                 >
                   🔑 Login
                 </Link>
-                <Link 
-                  to="/register" 
-                  className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white px-4 py-2 rounded-lg font-medium transition-all duration-200 shadow-lg hover:shadow-purple-500/25 hover:scale-105"
-                >
-                  📝 Registro
-                </Link>
+                
               </div>
             )}
           </div>
