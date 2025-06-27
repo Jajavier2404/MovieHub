@@ -56,15 +56,103 @@ function MovieList() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900/20 to-gray-900 flex items-center justify-center">
-        <div className="flex flex-col items-center space-y-6">
-          <div className="relative">
-            <div className="animate-spin rounded-full h-20 w-20 border-4 border-purple-500/30"></div>
-            <div className="animate-spin rounded-full h-20 w-20 border-t-4 border-purple-500 absolute top-0"></div>
+      <div className="min-h-screen bg-gray-900 flex items-center justify-center p-4 overflow-hidden">
+        <style jsx>{`
+          @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+          
+          .loading-container {
+            font-family: 'Poppins', sans-serif;
+            position: relative;
+            overflow: hidden;
+            padding: 60px;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5), 0 15px 25px rgba(0,0,0,0.3);
+            background: linear-gradient(135deg, rgba(26, 32, 44, 0.95), rgba(45, 55, 72, 0.95));
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+            max-width: 500px;
+          }
+          
+          .floating-shapes {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 0;
+          }
+          
+          .shape {
+            position: absolute;
+            border-radius: 50%;
+            background: linear-gradient(45deg, rgba(99, 102, 241, 0.1), rgba(139, 92, 246, 0.1));
+            animation: float 6s ease-in-out infinite;
+          }
+          
+          .shape:nth-child(1) { width: 80px; height: 80px; top: 10%; left: 10%; animation-delay: 0s; }
+          .shape:nth-child(2) { width: 60px; height: 60px; top: 70%; right: 15%; animation-delay: 2s; }
+          
+          @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(10deg); }
+          }
+          
+          .film-reel-loader {
+            width: 80px;
+            height: 80px;
+            border: 6px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            position: relative;
+            animation: rotate 2s linear infinite;
+            margin: 0 auto 30px auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0, 0, 0, 0.3);
+          }
+          
+          .film-reel-loader::before,
+          .film-reel-loader::after {
+            content: '';
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 50%;
+          }
+          
+          .film-reel-loader::before {
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+          }
+          
+          .film-reel-loader::after {
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+          }
+          
+          @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+          }
+        `}</style>
+        
+        <div className="loading-container">
+          <div className="floating-shapes">
+            <div className="shape"></div>
+            <div className="shape"></div>
           </div>
-          <div className="text-center">
-            <p className="text-white text-xl font-semibold mb-2">Cargando películas...</p>
-            <p className="text-gray-400">Preparando la mejor experiencia cinematográfica</p>
+          
+          <div className="relative z-10">
+            <div className="film-reel-loader">
+              <div className="text-2xl">🎬</div>
+            </div>
+            <h2 className="text-2xl font-bold text-white mb-4">Cargando películas...</h2>
+            <p className="text-gray-300">Preparando la mejor experiencia cinematográfica</p>
           </div>
         </div>
       </div>
@@ -72,103 +160,294 @@ function MovieList() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900/20 to-gray-900">
-      {/* Animated Background */}
-      <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-40 -right-40 w-80 h-80 bg-purple-500/10 rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-pink-500/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }}></div>
+    <div className="min-h-screen bg-gray-900 p-4 overflow-hidden">
+      <style jsx>{`
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+        
+        .movie-list-container {
+          font-family: 'Poppins', sans-serif;
+          max-width: 1400px;
+          margin: 0 auto;
+          position: relative;
+          overflow: hidden;
+        }
+        
+        .floating-shapes {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          overflow: hidden;
+          z-index: 0;
+          pointer-events: none;
+        }
+        
+        .shape {
+          position: absolute;
+          border-radius: 50%;
+          background: linear-gradient(45deg, rgba(99, 102, 241, 0.08), rgba(139, 92, 246, 0.08));
+          animation: float 8s ease-in-out infinite;
+        }
+        
+        .shape:nth-child(1) { width: 300px; height: 300px; top: 10%; left: -10%; animation-delay: 0s; }
+        .shape:nth-child(2) { width: 200px; height: 200px; top: 50%; right: -5%; animation-delay: 3s; }
+        .shape:nth-child(3) { width: 150px; height: 150px; bottom: 20%; left: 20%; animation-delay: 6s; }
+        
+        @keyframes float {
+          0%, 100% { transform: translateY(0) rotate(0deg); }
+          50% { transform: translateY(-30px) rotate(5deg); }
+        }
+        
+        .hero-section {
+          position: relative;
+          z-index: 10;
+          text-align: center;
+          margin-bottom: 50px;
+          padding: 60px 40px;
+          background: linear-gradient(135deg, rgba(26, 32, 44, 0.95), rgba(45, 55, 72, 0.95));
+          backdrop-filter: blur(15px);
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          border-radius: 20px;
+          box-shadow: 0 20px 40px rgba(0,0,0,0.3), 0 15px 25px rgba(0,0,0,0.2);
+        }
+        
+        .search-section {
+          position: relative;
+          z-index: 10;
+          background: linear-gradient(135deg, rgba(26, 32, 44, 0.95), rgba(45, 55, 72, 0.95));
+          backdrop-filter: blur(15px);
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          border-radius: 20px;
+          padding: 30px;
+          margin-bottom: 40px;
+          box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+        }
+        
+        .search-input {
+          background-color: rgba(45, 55, 72, 0.6);
+          border: 2px solid rgba(99, 102, 241, 0.3);
+          color: #E2E8F0;
+          padding: 15px 20px 15px 50px;
+          width: 100%;
+          border-radius: 12px;
+          transition: all 0.3s ease;
+          font-size: 16px;
+          backdrop-filter: blur(5px);
+        }
+        
+        .search-input::placeholder { color: #A0AEC0; }
+        .search-input:focus {
+          outline: none;
+          border-color: #6366F1;
+          box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+          background-color: rgba(45, 55, 72, 0.8);
+        }
+        
+        .filter-select {
+          background-color: rgba(45, 55, 72, 0.6);
+          border: 2px solid rgba(99, 102, 241, 0.3);
+          color: #E2E8F0;
+          padding: 15px 20px;
+          border-radius: 12px;
+          transition: all 0.3s ease;
+          font-size: 16px;
+          backdrop-filter: blur(5px);
+        }
+        
+        .filter-select:focus {
+          outline: none;
+          border-color: #6366F1;
+          box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+        }
+        
+        .view-toggle {
+          background-color: rgba(45, 55, 72, 0.6);
+          border-radius: 12px;
+          padding: 4px;
+          display: flex;
+          backdrop-filter: blur(5px);
+          border: 1px solid rgba(99, 102, 241, 0.2);
+        }
+        
+        .view-button {
+          padding: 12px;
+          border-radius: 8px;
+          transition: all 0.3s ease;
+          color: #A0AEC0;
+          border: none;
+          background: transparent;
+          cursor: pointer;
+        }
+        
+        .view-button.active {
+          background: linear-gradient(135deg, #6366F1, #8B5CF6);
+          color: white;
+          box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+        }
+        
+        .view-button:hover:not(.active) {
+          color: white;
+          background-color: rgba(99, 102, 241, 0.2);
+        }
+        
+        .add-button {
+          border-radius: 12px;
+          border: none;
+          background: linear-gradient(135deg, #6366F1, #8B5CF6, #EC4899);
+          color: white;
+          font-size: 16px;
+          font-weight: 600;
+          padding: 16px 32px;
+          letter-spacing: 0.5px;
+          transition: all 0.3s ease;
+          cursor: pointer;
+          position: relative;
+          overflow: hidden;
+          text-decoration: none;
+          display: inline-flex;
+          align-items: center;
+          gap: 12px;
+        }
+        
+        .add-button:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 10px 25px rgba(99, 102, 241, 0.4);
+        }
+        
+        .results-section {
+          position: relative;
+          z-index: 10;
+          background: linear-gradient(135deg, rgba(26, 32, 44, 0.95), rgba(45, 55, 72, 0.95));
+          backdrop-filter: blur(15px);
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          border-radius: 20px;
+          padding: 30px;
+          box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+        }
+        
+        .empty-state {
+          text-align: center;
+          padding: 80px 40px;
+        }
+        
+        .trending-badge {
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+          background: rgba(99, 102, 241, 0.2);
+          backdrop-filter: blur(10px);
+          border: 1px solid rgba(99, 102, 241, 0.3);
+          border-radius: 25px;
+          padding: 8px 16px;
+          color: #A78BFA;
+          font-size: 14px;
+          font-weight: 600;
+          margin-bottom: 20px;
+        }
+        
+        .count-badge {
+          background: linear-gradient(135deg, #6366F1, #8B5CF6, #EC4899);
+          color: white;
+          padding: 6px 16px;
+          border-radius: 20px;
+          font-size: 14px;
+          font-weight: 600;
+          margin-left: 15px;
+        }
+      `}</style>
+
+      {/* Floating background shapes */}
+      <div className="floating-shapes">
+        <div className="shape"></div>
+        <div className="shape"></div>
+        <div className="shape"></div>
       </div>
 
-      <div className="relative z-10 px-4 py-8">
-        <div className="max-w-7xl mx-auto">
-          {/* Hero Section */}
-          <div className="text-center mb-12">
-            <div className="inline-flex items-center space-x-2 bg-purple-500/20 backdrop-blur-sm border border-purple-500/30 rounded-full px-4 py-2 text-purple-300 text-sm mb-4">
-              <TrendingUp className="w-4 h-4" />
-              <span>Trending Now</span>
-            </div>
-            
-            <h1 className="text-6xl font-bold bg-gradient-to-r from-purple-400 via-pink-400 to-purple-400 bg-clip-text text-transparent mb-4">
-              🎬 Cinemática
-            </h1>
-            <p className="text-gray-400 text-xl max-w-3xl mx-auto mb-8 leading-relaxed">
-              Descubre, explora y comparte las mejores películas del cine mundial. 
-              Tu plataforma definitiva para cinéfilos apasionados.
-            </p>
-            
-            <Link 
-              to="/add" 
-              className="inline-flex items-center space-x-3 bg-gradient-to-r from-purple-500 via-pink-500 to-purple-500 hover:from-purple-600 hover:via-pink-600 hover:to-purple-600 text-white px-8 py-4 rounded-xl font-bold text-lg transition-all duration-300 shadow-lg hover:shadow-purple-500/25 hover:scale-105 transform"
-            >
-              <Plus className="w-5 h-5" />
-              <span>Agregar Nueva Película</span>
-              <span>🎭</span>
-            </Link>
+      <div className="movie-list-container">
+        {/* Hero Section */}
+        <div className="hero-section">
+          <div className="trending-badge">
+            <TrendingUp className="w-4 h-4" />
+            <span>Diviertete</span>
           </div>
+          
+          <h1 className="text-6xl font-bold bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent mb-6">
+            🎬 Cinemática
+          </h1>
+          <p className="text-gray-300 text-xl max-w-3xl mx-auto mb-10 leading-relaxed">
+            Descubre, explora y comparte las mejores películas del cine mundial. 
+            Tu plataforma definitiva para cinéfilos apasionados.
+          </p>
+          
+          <Link to="/add" className="add-button">
+            <Plus className="w-5 h-5" />
+            <span>Agregar Nueva Película</span>
+            <span>🎭</span>
+          </Link>
+        </div>
 
-          {/* Search and Filters */}
-          <div className="bg-gray-800/30 backdrop-blur-sm rounded-2xl border border-gray-700/50 p-6 mb-8">
-            <div className="flex flex-col lg:flex-row gap-4 items-center">
-              {/* Search */}
-              <div className="relative flex-1">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-                <input
-                  type="text"
-                  placeholder="Buscar películas por título o descripción..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full pl-10 pr-4 py-3 bg-gray-700/50 border border-gray-600/50 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 transition-all"
-                />
-              </div>
+        {/* Search and Filters */}
+        <div className="search-section">
+          <div className="flex flex-col lg:flex-row gap-6 items-center">
+            {/* Search */}
+            <div className="relative flex-1">
+              <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5 z-10" />
+              <input
+                type="text"
+                placeholder="Buscar películas por título o descripción..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="search-input"
+              />
+            </div>
 
-              {/* Filters */}
-              <div className="flex flex-wrap gap-3">
-                <select
-                  value={sortBy}
-                  onChange={(e) => setSortBy(e.target.value)}
-                  className="px-4 py-3 bg-gray-700/50 border border-gray-600/50 rounded-lg text-white focus:outline-none focus:border-purple-500"
+            {/* Filters */}
+            <div className="flex flex-wrap gap-4">
+              <select
+                value={sortBy}
+                onChange={(e) => setSortBy(e.target.value)}
+                className="filter-select"
+              >
+                <option value="title">Ordenar por Título</option>
+                <option value="newest">Más Recientes</option>
+              </select>
+
+              {/* View Mode Toggle */}
+              <div className="view-toggle">
+                <button
+                  onClick={() => setViewMode('grid')}
+                  className={`view-button ${viewMode === 'grid' ? 'active' : ''}`}
                 >
-                  <option value="title">Ordenar por Título</option>
-                  <option value="newest">Más Recientes</option>
-                </select>
-
-                {/* View Mode Toggle */}
-                <div className="flex bg-gray-700/50 rounded-lg p-1">
-                  <button
-                    onClick={() => setViewMode('grid')}
-                    className={`p-2 rounded transition-colors ${viewMode === 'grid' ? 'bg-purple-500 text-white' : 'text-gray-400 hover:text-white'}`}
-                  >
-                    <Grid className="w-5 h-5" />
-                  </button>
-                  <button
-                    onClick={() => setViewMode('list')}
-                    className={`p-2 rounded transition-colors ${viewMode === 'list' ? 'bg-purple-500 text-white' : 'text-gray-400 hover:text-white'}`}
-                  >
-                    <List className="w-5 h-5" />
-                  </button>
-                </div>
+                  <Grid className="w-5 h-5" />
+                </button>
+                <button
+                  onClick={() => setViewMode('list')}
+                  className={`view-button ${viewMode === 'list' ? 'active' : ''}`}
+                >
+                  <List className="w-5 h-5" />
+                </button>
               </div>
             </div>
           </div>
+        </div>
 
-          {/* Movies Grid/List */}
+        {/* Movies Results */}
+        <div className="results-section">
           {filteredMovies.length === 0 ? (
-            <div className="text-center py-20">
-              <div className="text-8xl mb-6 opacity-50">🎬</div>
-              <h3 className="text-3xl font-bold text-gray-300 mb-4">
+            <div className="empty-state">
+              <div className="text-8xl mb-8 opacity-50">🎬</div>
+              <h3 className="text-4xl font-bold text-white mb-6">
                 {searchTerm ? 'No se encontraron películas' : 'No hay películas disponibles'}
               </h3>
-              <p className="text-gray-500 mb-8 text-lg">
+              <p className="text-gray-300 mb-10 text-lg max-w-2xl mx-auto leading-relaxed">
                 {searchTerm 
-                  ? `No hay resultados para "${searchTerm}". Intenta con otros términos.`
-                  : '¡Sé el primero en agregar una película a la colección!'
+                  ? `No hay resultados para "${searchTerm}". Intenta con otros términos de búsqueda.`
+                  : '¡Sé el primero en agregar una película a la colección y comienza esta increíble aventura cinematográfica!'
                 }
               </p>
               {!searchTerm && (
-                <Link 
-                  to="/add" 
-                  className="inline-flex items-center space-x-2 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white px-6 py-3 rounded-lg font-medium transition-all duration-200 shadow-lg hover:shadow-purple-500/25"
-                >
+                <Link to="/add" className="add-button">
                   <Plus className="w-5 h-5" />
                   <span>Agregar Primera Película</span>
                   <span>🌟</span>
@@ -179,12 +458,12 @@ function MovieList() {
             <>
               {/* Results Header */}
               <div className="flex items-center justify-between mb-8">
-                <h2 className="text-2xl font-bold text-white flex items-center space-x-3">
-                  <span>🍿</span>
+                <h2 className="text-3xl font-bold text-white flex items-center">
+                  <span className="mr-4">🍿</span>
                   <span>
                     {searchTerm ? `Resultados para "${searchTerm}"` : 'Películas Disponibles'}
                   </span>
-                  <span className="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-3 py-1 rounded-full text-sm">
+                  <span className="count-badge">
                     {filteredMovies.length}
                   </span>
                 </h2>
